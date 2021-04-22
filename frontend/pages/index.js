@@ -1,6 +1,17 @@
+import Hero from '../components/Hero'
+import Navbar from '../components/Navbar'
+
 function Home({ data }) {
   console.log(data)
-  return (<div>hello</div>)   
+  return (
+    <section>
+      <Navbar/>
+      <Hero/>
+    </section>
+    
+
+    
+  )   
 }
 
 export async function getStaticProps(){
