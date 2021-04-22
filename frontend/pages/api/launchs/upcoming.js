@@ -24,7 +24,6 @@ export default async function upcoming(request,response){
                     },
                     payload:{
                         id:launch.payloads[0],
-                        orbit:''
                     },
                     date:{
                         utc:launch.date_utc,
@@ -42,20 +41,15 @@ export default async function upcoming(request,response){
                     const spacexdataApiResponse = await fetch(`https://api.spacexdata.com/v4/payloads/${launch.payload.id}`);
                     const spacexdataApiResponseJson = await spacexdataApiResponse.json();
                     
-                    console.log(inc,spacexdataApiResponseJson.orbit)
-                    if(spacexdataApiResponseJson != undefined && spacexdataApiResponseJson != []){
-                        data[inc].payload.orbit = spacexdataApiResponseJson.orbit    
+                    if(spacexdataApiResponseJson != undefined){
+                        //data[inc][payload][orbit] = spacexdataApiResponseJson.orbit   
+                        data[inc].payload = spacexdataApiResponseJson.orbit
+                        console.log(inc,spacexdataApiResponseJson.orbit,data[inc].payload)
                     }
                 }
-                
-
                 inc++;
             });
         }
-
-        
-        
-
         response.json(data);
     }else{
         response.status(405).json({code:'Method Not Allowed'}); //return 405 http code if request.method !== GET
