@@ -8,9 +8,6 @@ function Home({ data }) {
       <Navbar/>
       <Hero/>
     </section>
-    
-
-    
   )   
 }
 

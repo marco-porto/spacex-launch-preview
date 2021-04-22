@@ -5,7 +5,6 @@ export default async function upcoming(request,response){
         const spacexdataApiResponseJson = await spacexdataApiResponse.json();
         
         let data = [];
-        let inc = 0;
         if(spacexdataApiResponseJson != undefined && spacexdataApiResponseJson != []){
             spacexdataApiResponseJson.forEach(async launch => {
                 data.push({
@@ -35,19 +34,17 @@ export default async function upcoming(request,response){
                 })
             });
 
-            data.forEach(async launch => {
+            data.forEach(async (launch,index) => {
                 //payload
                 if(launch.payload.id != undefined){
                     const spacexdataApiResponse = await fetch(`https://api.spacexdata.com/v4/payloads/${launch.payload.id}`);
                     const spacexdataApiResponseJson = await spacexdataApiResponse.json();
-                    
                     if(spacexdataApiResponseJson != undefined){
-                        //data[inc][payload][orbit] = spacexdataApiResponseJson.orbit   
-                        data[inc].payload = spacexdataApiResponseJson.orbit
-                        console.log(inc,spacexdataApiResponseJson.orbit,data[inc].payload)
+                        console.log(index,spacexdataApiResponseJson.orbit,data[index].payload)
+                        data[index].payload.orbit = spacexdataApiResponseJson.orbit
+                        console.log(index,spacexdataApiResponseJson.orbit,data[index].payload)
                     }
                 }
-                inc++;
             });
         }
         response.json(data);
