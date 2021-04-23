@@ -31,23 +31,18 @@ export default async function upcoming(request,response){
                     },
                     name:launch.name,
                     details:launch.details
-                })
-            });
-
-            data.forEach(async (launch,index) => {
-                //payload
-                if(launch.payload.id != undefined){
-                    const spacexdataApiResponse = await fetch(`https://api.spacexdata.com/v4/payloads/${launch.payload.id}`);
-                    const spacexdataApiResponseJson = await spacexdataApiResponse.json();
-                    if(spacexdataApiResponseJson != undefined){
-                        console.log(index,spacexdataApiResponseJson.orbit,data[index].payload)
-                        data[index].payload.orbit = spacexdataApiResponseJson.orbit
-                        console.log(index,spacexdataApiResponseJson.orbit,data[index].payload)
-                    }
-                }
+                });
             });
         }
-        response.json(data);
+        data.map(async launch => {
+            if(launch.payload.id != undefined){
+                const spacexdataApiResponsePayload = await fetch(`https://api.spacexdata.com/v4/payloads/${launch.payload.id}`);
+                const spacexdataApiResponsePayloadJson = await spacexdataApiResponsePayload.json()
+                launch.payload.orbit = spacexdataApiResponsePayloadJson.orbit
+            }
+        })
+        console.log(data)
+        response.json(data);        
     }else{
         response.status(405).json({code:'Method Not Allowed'}); //return 405 http code if request.method !== GET
     }
